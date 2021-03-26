@@ -14,6 +14,9 @@ class FileItem extends StatelessWidget {
       if (type == "Directory") {
         return Icons.folder;
       }
+      if (type == "Parted") {
+        return Icons.dns;
+      }
       return Icons.description;
     }
     return ListTile(

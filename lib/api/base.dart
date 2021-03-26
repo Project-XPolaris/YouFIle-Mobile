@@ -12,10 +12,17 @@ class ListResponseWrap<T> {
     page = json['page'];
     pageSize = json['pageSize'];
     if (json['result'] != null) {
-      result = new List<T>();
+      result = [];
       json['result'].forEach((v) {
         result.add(converter(v));
       });
     }
+  }
+}
+
+class BaseResponse {
+  bool success;
+  BaseResponse.fromJson(Map<String, dynamic> json) {
+    this.success = json["success"];
   }
 }

@@ -70,5 +70,10 @@ class ApiClient {
     return InfoResponse.fromJson(response.data);
   }
 
+  Future<BaseResponse> remount() async {
+    var response = await _dio.get("/fstab/reload");
+    return BaseResponse.fromJson(response.data);
+  }
+
   ApiClient._internal();
 }

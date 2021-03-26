@@ -11,11 +11,12 @@ class HomeProvider extends ChangeNotifier {
   String display = "list";
   File copySource;
   InfoResponse info;
-  loadContent()async{
-     if (!isFirstLoad){
-       return;
-     }
-     isFirstLoad = false;
+
+  loadContent() async {
+    if (!isFirstLoad) {
+      return;
+    }
+    isFirstLoad = false;
     var response = await ApiClient().readDirPath(currentPath);
     files = response.result;
     sep = response.sep;
@@ -35,10 +36,8 @@ class HomeProvider extends ChangeNotifier {
           currentPath += sep;
         }
       }
-      if (parts.length == 1) {
-
-      }
-    }else{
+      if (parts.length == 1) {}
+    } else {
       return false;
     }
     return true;
@@ -70,12 +69,12 @@ class HomeProvider extends ChangeNotifier {
         if (!routePath.endsWith(sep)) {
           routePath += sep;
         }
-        routes.add(RoutePart(name: part,path: routePath));
+        routes.add(RoutePart(name: part, path: routePath));
         continue;
       }
-      cur = [cur,part].join(sep);
+      cur = [cur, part].join(sep);
       print(cur);
-      routes.add(RoutePart(name: part,path: cur));
+      routes.add(RoutePart(name: part, path: cur));
     }
     return routes;
   }
@@ -84,6 +83,7 @@ class HomeProvider extends ChangeNotifier {
     this.display = display;
     notifyListeners();
   }
+
   createDirectory(String name) async {
     await ApiClient().mkdir("$currentPath$sep$name");
     loadPath(null);
@@ -101,11 +101,12 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  newCopyTask() async{
+  newCopyTask() async {
     if (copySource == null) {
       return;
     }
-    await ApiClient().newCopyFileTask(copySource.path, "$currentPath$sep${copySource.name}");
+    await ApiClient()
+        .newCopyFileTask(copySource.path, "$currentPath$sep${copySource.name}");
     setCopySource(null);
     notifyListeners();
   }
@@ -117,10 +118,15 @@ class HomeProvider extends ChangeNotifier {
     info = await ApiClient().getInfo();
     notifyListeners();
   }
+
+  remount() async {
+    await ApiClient().remount();
+  }
 }
 
 class RoutePart {
   String name;
   String path;
-  RoutePart({this.name,this.path});
+
+  RoutePart({this.name, this.path});
 }

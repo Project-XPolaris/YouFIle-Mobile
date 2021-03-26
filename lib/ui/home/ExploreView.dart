@@ -1,4 +1,3 @@
-
 import 'package:android_intent/android_intent.dart';
 import 'package:flutter/material.dart';
 import 'package:youfile/api/file.dart';
@@ -168,14 +167,16 @@ List<Widget> getExploreViewActions(
           case "new_directory":
             showDialog(
                 context: context,
-                child: TextInputDialog(
-                  title: "Create directory",
-                  okText: "create",
-                  hint: "Directory name",
-                  onOk: (name) {
-                    provider.createDirectory(name);
-                  },
-                ));
+                builder: (context) {
+                  return TextInputDialog(
+                    title: "Create directory",
+                    okText: "create",
+                    hint: "Directory name",
+                    onOk: (name) {
+                      provider.createDirectory(name);
+                    },
+                  );
+                });
         }
       },
       itemBuilder: (BuildContext context) {
@@ -199,7 +200,6 @@ List<Widget> getExploreViewActions(
       icon: Icon(Icons.reorder),
       onSelected: (value) {
         switch (value) {
-
         }
       },
       itemBuilder: (BuildContext context) {
@@ -393,10 +393,9 @@ class FileActions extends StatelessWidget {
       });
       return actions;
     }
-
     return Column(
-        mainAxisSize: MainAxisSize.max,
-        children: renderActions(),
-      );
+      mainAxisSize: MainAxisSize.max,
+      children: renderActions(),
+    );
   }
 }
