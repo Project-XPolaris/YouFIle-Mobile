@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:youfile/utils/icon.dart';
 
 class FileMediumItem extends StatelessWidget {
   final String name;
@@ -8,15 +9,6 @@ class FileMediumItem extends StatelessWidget {
   FileMediumItem({this.name, this.type,this.onTap,this.onLongPress});
   @override
   Widget build(BuildContext context) {
-    getIcon(){
-      if (type == "Directory") {
-        return Icons.folder;
-      }
-      if (type == "Parted") {
-        return Icons.dns;
-      }
-      return Icons.description;
-    }
     return GestureDetector(
       onTap: onTap,
       onLongPress: onLongPress,
@@ -25,7 +17,11 @@ class FileMediumItem extends StatelessWidget {
           child: Container(
             child: Column(
               children: [
-                Icon(getIcon(),size: 64,color: Colors.yellow.shade800,),
+                Container(
+                  width: 56,
+                    height: 56,
+                  child: Image(image: getFileIcon(type, name),width: 56,),
+                ),
                 Container(
                   margin: EdgeInsets.only(top: 8),
                   padding: EdgeInsets.only(left: 16,right: 16),

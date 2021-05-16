@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:youfile/utils/icon.dart';
 
 class FileItem extends StatelessWidget {
   final String name;
@@ -10,20 +11,9 @@ class FileItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    getIcon(){
-      if (type == "Directory") {
-        return Icons.folder;
-      }
-      if (type == "Parted") {
-        return Icons.dns;
-      }
-      return Icons.description;
-    }
     return ListTile(
       onTap: onTap,
-      leading: CircleAvatar(
-        child:Icon(getIcon())
-      ),
+      leading: Image(image: getFileIcon(type, name),width: 36,height: 36,),
       title: Text(name),
       subtitle: Text("$type  $size"),
       onLongPress: onLongPress,

@@ -8,7 +8,7 @@ class HomeProvider extends ChangeNotifier {
   List<File> files = [];
   bool isFirstLoad = true;
   String sep = "";
-  String display = "list";
+  String display = "medium";
   File copySource;
   InfoResponse info;
 
