@@ -4,7 +4,6 @@ import 'package:youfile/api/info.dart';
 import 'package:youfile/components/FileItem.dart';
 import 'package:youfile/components/FileMediumItem.dart';
 import 'package:youfile/ui/home/provider.dart';
-import 'package:youfile/ui/index/IndexPage.dart';
 import 'package:youfile/ui/task/TaskPage.dart';
 
 class StartView extends StatelessWidget {
@@ -126,10 +125,6 @@ List<Widget> getStartViewActions(BuildContext context, HomeProvider provider) {
       onSelected: (value) async {
         if (value == 'remount'){
           provider.remount();
-        }else if (value == 'logout') {
-          SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-          sharedPreferences.remove("apiUrl");
-          Navigator.pushReplacement(context,  MaterialPageRoute(builder: (context) => IndexPage()));
         }
       },
       itemBuilder: (BuildContext context) {
@@ -143,19 +138,6 @@ List<Widget> getStartViewActions(BuildContext context, HomeProvider provider) {
                   child: Icon(Icons.donut_large),
                 ),
                 Text("Remount directories")
-              ],
-            ),
-          ),
-          PopupMenuDivider(),
-          PopupMenuItem<String>(
-            value: "logout",
-            child: Row(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(right: 16),
-                  child: Icon(Icons.exit_to_app),
-                ),
-                Text("Logout")
               ],
             ),
           ),

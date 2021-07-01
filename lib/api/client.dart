@@ -2,7 +2,9 @@ import 'package:dio/dio.dart';
 import 'package:youfile/api/base.dart';
 import 'package:youfile/api/file.dart';
 import 'package:youfile/api/info.dart';
+import 'package:youfile/api/service_info.dart';
 import 'package:youfile/api/task.dart';
+import 'package:youfile/api/user_auth.dart';
 
 import '../config.dart';
 
@@ -14,7 +16,12 @@ class ApiClient {
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (RequestOptions options) async {
         options.baseUrl = ApplicationConfig().serviceUrl;
-
+        String token = ApplicationConfig().token;
+        if (token != null && token.isNotEmpty) {
+          options.headers = {
+            "Authorization": "Bearer $token"
+          };
+        }
         return options; //continue
       },
     ));
@@ -74,6 +81,13 @@ class ApiClient {
     var response = await _dio.get("/fstab/reload");
     return BaseResponse.fromJson(response.data);
   }
-
+  Future<ServiceInfo> fetchServiceInfo() async {
+    var response = await _dio.get("/service/info");
+    return ServiceInfo.fromJson(response.data);
+  }
+  Future<UserAuth> fetchUserAuth(String username,String password)async {
+    var response = await _dio.post("/user/auth",data: {"username":username,"password":password});
+    return UserAuth.fromJson(response.data);
+  }
   ApiClient._internal();
 }

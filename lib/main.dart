@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:youfile/ui/home/HomePage.dart';
-import 'package:youfile/ui/index/IndexPage.dart';
+import 'package:youfile/ui/start/StartPage.dart';
 
 void main() {
   runApp(Center(child: MyApp()));
@@ -26,7 +25,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.yellow,
 
       ),
-      home: IndexPage(),
+      home: StartPage(),
     );
   }
 }
