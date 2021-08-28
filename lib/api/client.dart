@@ -17,6 +17,7 @@ class ApiClient {
       onRequest: (RequestOptions options) async {
         options.baseUrl = ApplicationConfig().serviceUrl;
         String token = ApplicationConfig().token;
+        print(token);
         if (token != null && token.isNotEmpty) {
           options.headers = {
             "Authorization": "Bearer $token"

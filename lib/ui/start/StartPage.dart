@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:youfile/api/client.dart';
 import 'package:youfile/api/user_auth.dart';
@@ -34,7 +35,6 @@ class _StartPageState extends State<StartPage> {
       if (!uri.hasPort) {
         inputUrl += ":8300";
       }
-      print(inputUrl);
       ApplicationConfig().serviceUrl = inputUrl;
       var info = await ApiClient().fetchServiceInfo();
       if (!info.auth) {
@@ -47,16 +47,20 @@ class _StartPageState extends State<StartPage> {
         return;
       }
       // login with account
-      UserAuth auth = await ApiClient().fetchUserAuth(inputUsername, inputPassword);
-      if (auth.success) {
-        ApplicationConfig().token = auth.token;
-        ApplicationConfig().username = inputUsername;
-        LoginHistoryManager().add(LoginHistory(
-            apiUrl: inputUrl,
-            username: inputUsername,
-            token: auth.token));
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => HomePage()));
+      try {
+        UserAuth auth = await ApiClient().fetchUserAuth(inputUsername, inputPassword);
+        if (auth.success) {
+          ApplicationConfig().token = auth.token;
+          ApplicationConfig().username = inputUsername;
+          LoginHistoryManager().add(LoginHistory(
+              apiUrl: inputUrl,
+              username: inputUsername,
+              token: auth.token));
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => HomePage()));
+        }
+      } on DioError catch(e) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.response.data["reason"])));
       }
     }
 
@@ -64,13 +68,6 @@ class _StartPageState extends State<StartPage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _onFinishClick();
-        },
-        backgroundColor: Colors.yellow.shade900,
-        child: Icon(Icons.chevron_right),
       ),
       body: FutureBuilder(
           future: _init(),
@@ -86,7 +83,6 @@ class _StartPageState extends State<StartPage> {
                         child: Text(
                           "YouFile",
                           style: TextStyle(
-                            color: Colors.yellow.shade700,
                             fontSize: 48,
                           ),
                         ),
@@ -149,42 +145,49 @@ class _StartPageState extends State<StartPage> {
                                 ),
                                 ListView(
                                   children: [
-                                    TextField(
-                                      cursorColor: Colors.yellow.shade900,
-                                      decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.yellow.shade900)),
+                                    Container(
+                                      margin: EdgeInsets.only(top: 16),
+                                      child: TextField(
+                                        decoration: InputDecoration(
                                           focusedBorder: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.yellow.shade900)),
+                                            borderSide: BorderSide(
+                                                color: Colors.yellow.shade900,
+                                                width: 1.0),
+                                          ),
                                           enabledBorder: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.yellow.shade900)),
-                                          focusColor: Colors.yellow.shade900,
-                                          hintText: 'Service URL'),
-                                      onChanged: (text) {
-                                        setState(() {
-                                          inputUrl = text;
-                                        });
-                                      },
+                                            borderSide: BorderSide(
+                                                color: Colors.black12,
+                                                width: 1.0),
+                                          ),
+                                          labelText: "URL",
+                                          labelStyle: TextStyle(color: Colors.black54)
+                                        ),
+                                        cursorColor: Colors.yellow.shade900,
+                                        onChanged: (text) {
+                                          setState(() {
+                                            inputUrl = text;
+                                          });
+                                        },
+                                      ),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.only(top: 16),
                                       child: TextField(
-                                        cursorColor: Colors.yellow.shade900,
                                         decoration: InputDecoration(
-                                            border: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors.yellow.shade900)),
                                             focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors.yellow.shade900)),
+                                              borderSide: BorderSide(
+                                                  color: Colors.yellow.shade900,
+                                                  width: 1.0),
+                                            ),
                                             enabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors.yellow.shade900)),
-                                            focusColor: Colors.yellow.shade900,
-                                            hintText: 'Username'),
+                                              borderSide: BorderSide(
+                                                  color: Colors.black12,
+                                                  width: 1.0),
+                                            ),
+                                            labelText: "Username",
+                                            labelStyle: TextStyle(color: Colors.black54)
+                                        ),
+                                        cursorColor: Colors.yellow.shade900,
                                         onChanged: (text) {
                                           setState(() {
                                             inputUsername = text;
@@ -198,24 +201,42 @@ class _StartPageState extends State<StartPage> {
                                         enableSuggestions: false,
                                         autocorrect: false,
                                         obscureText: true,
-                                        cursorColor: Colors.yellow.shade900,
                                         decoration: InputDecoration(
-                                            border: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors.yellow.shade900)),
                                             focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors.yellow.shade900)),
+                                              borderSide: BorderSide(
+                                                  color: Colors.yellow.shade900,
+                                                  width: 1.0),
+                                            ),
                                             enabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors.yellow.shade900)),
-                                            focusColor: Colors.yellow.shade900,
-                                            hintText: 'Password'),
+                                              borderSide: BorderSide(
+                                                  color: Colors.black12,
+                                                  width: 1.0),
+                                            ),
+                                            labelText: "Password",
+                                            labelStyle: TextStyle(color: Colors.black54)
+                                        ),
+                                        cursorColor: Colors.yellow.shade900,
                                         onChanged: (text) {
                                           setState(() {
                                             inputPassword = text;
                                           });
                                         },
+                                      ),
+                                    ),
+                                    Container(
+                                      width: double.infinity,
+                                      padding: const EdgeInsets.only(top: 16),
+                                      child: ElevatedButton(
+                                        child: Text(
+                                          "Login",
+                                          style: TextStyle(),
+                                        ),
+                                        onPressed: () {
+                                          _onFinishClick();
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          primary: Colors.yellow.shade900,
+                                        ),
                                       ),
                                     ),
                                   ],

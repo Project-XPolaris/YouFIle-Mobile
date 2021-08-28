@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:youfile/api/info.dart';
 import 'package:youfile/components/FileItem.dart';
 import 'package:youfile/components/FileMediumItem.dart';
